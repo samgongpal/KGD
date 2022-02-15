@@ -68,13 +68,13 @@ CREATE TABLE THEATER_ROOM(
     tr_column number(10)
 );
 
-INSERT INTO THEATER_ROOM VALUES(10, 5, 5);/* 십의 자리 : 1 (중앙동) 일장의 자리 : 1~9(상영관번호)*/
+INSERT INTO THEATER_ROOM VALUES(10, 5, 5);/* 십의 자리 : 1 (중앙동) 일의 자리 : 1~9(상영관번호)*/
 INSERT INTO THEATER_ROOM VALUES(11, 6, 6);
 INSERT INTO THEATER_ROOM VALUES(12, 7, 7);
-INSERT INTO THEATER_ROOM VALUES(20, 5, 5);/* 십의 자리 : 2 (초지동) 일장의 자리 : 1~9(상영관번호)*/
+INSERT INTO THEATER_ROOM VALUES(20, 5, 5);/* 십의 자리 : 2 (초지동) 일의 자리 : 1~9(상영관번호)*/
 INSERT INTO THEATER_ROOM VALUES(21, 6, 6);
 INSERT INTO THEATER_ROOM VALUES(22, 7, 7);
-INSERT INTO THEATER_ROOM VALUES(30, 5, 5);/* 십의 자리 : 3 (초지동) 일장의 자리 : 1~9(상영관번호)*/
+INSERT INTO THEATER_ROOM VALUES(30, 5, 5);/* 십의 자리 : 3 (초지동) 일의 자리 : 1~9(상영관번호)*/
 INSERT INTO THEATER_ROOM VALUES(31, 6, 6);
 INSERT INTO THEATER_ROOM VALUES(33, 7, 7);
 
