@@ -4,12 +4,12 @@ drop table THEATER;
 drop table THEATER_ROOM;
 drop table RESERVATION;
 drop table qna;
-drop sequence u_no_seq;
 
 CREATE TABLE MOVIE(
+
     m_no number(5) PRIMARY KEY,
-    m_name varchar2(30),
-    m_dir varchar2(10),
+    m_name varchar2(100),
+    m_dir varchar2(50),
     m_actor varchar2(100),
     m_genre varchar2(10),
     m_sdate date,
@@ -17,9 +17,10 @@ CREATE TABLE MOVIE(
     m_grade char(2),
     m_rtime number(10),
     m_view number(10),
-    m_info varchar(100),
-    u_no number(5) not null
+    m_info varchar(1000)
 );
+
+
 
 CREATE TABLE MUSER(
     u_no number(5) PRIMARY KEY,
@@ -32,8 +33,64 @@ CREATE TABLE MUSER(
     u_regdate date,
     u_phone varchar2(15)
 );
-/*CREATE SEQUENCE u_no_seq START WITH 1 INCREMENT BY 1 NOCACHE; */
-INSERT INTO MUSER VALUES(1, 'aaa123', 'aaa123', 'aaa123@aaa.com', '19900101', '±èÈ¸¿ø', 'M', '20210101', '01011112222');
+
+CREATE TABLE THEATER(
+    t_no number(5) PRIMARY KEY,
+    t_name varchar2(10),
+    t_address varchar2(10),
+    t_list number(3)
+);
+
+CREATE TABLE THEATER_ROOM(
+    tr_no number(5) PRIMARY KEY,
+    tr_row number(10),
+    tr_column number(10),
+    t_no number(5) not null /* ¿µÈ­°ü Å×ÀÌºí join */
+);
+
+
+CREATE TABLE RESERVATION(
+    r_no number(10) PRIMARY KEY,
+    r_count number(10),
+    r_date date,
+    m_no number(5) not null, /* ¿µÈ­¹øÈ£ : ¿µÈ­Å×ÀÌºí¿¡¼­ °°Àº ¹øÈ£°¡ ÀÖÀ¸¸é ±× ¿µÈ­ ¿¹¾à */
+    u_no number(5) not null, /* È¸¿ø¹øÈ£ : È¸¿øÅ×ÀÌºí¿¡¼­ »ý³â¿ùÀÏ °¡Á®¿Í¼­ °ü¶÷µî±Þ °Ë»ç */
+    t_no number(5) not null /* ¿µÈ­°ü¹øÈ£ : ¿µÈ­°üÅ×ÀÌºí¿¡¼­ ¿µÈ­°ü Á¤º¸ join */
+);
+
+CREATE TABLE qna(
+    q_no number(10) PRIMARY KEY,
+    q_title varchar2(50),
+    q_con varchar2(3000),
+    q_hit number(10),
+    q_date date
+);
+
+commit;
+
+/* ¿µÈ­¹øÈ£, ¿µÈ­Á¦¸ñ, °¨µ¶, ¹è¿ì, Àå¸£, °³ºÀÀÏ, Á¾¿µÀÏ, °ü¶÷µî±Þ, »ó¿µ½Ã°£, °ü°´¼ö, ¿µÈ­¼³¸í */
+insert into MOVIE values(1, '¾ðÂ÷Æ¼µå', '·çº¥ÇÃ·¹¼Å', '·ÒÈ¦·£µå,¸¶Å©¿ù¹ö±×', '¾×¼Ç', '20220216', '20220516', 
+'A', 116, 40000, '¸ðµç °ÍÀ» °É¾ú´Ù¸é ¼¼»ó ´©±¸º¸´Ù ºü¸£°Ô Ã£¾Æ¾ß ÇÑ´Ù!');
+insert into MOVIE values(2, '±ØÀåÆÇ ÁÖ¼úÈ¸Àü 0', '¹Ú¼ºÈÄ', '¿À°¡Å¸¸Þ±¸¹Ì,ÇÏ³ªÀÚ¿ÍÄ«³ª', '¾Ö´Ï', '20220217', '20220517',
+'B', 105, 20000, '12¿ù 24ÀÏ, ¿ì¸®´Â ¹é±Í¾ßÇàÀ» °áÇàÇÑ´Ù');
+insert into MOVIE values(3, 'µá', 'µå´Ï ºô³úºê', 'Æ¼¸ð½Ã¼£¶ó¸Þ,·¹º£Ä«ÆÛ°Å½¼', 'SF', '20220209', '20220509',
+'A', 155, 50000, 'µáÀ» Áö¹èÇÏ´Â ÀÚ°¡ ¿ìÁÖ¸¦ Áö¹èÇÑ´Ù!');
+insert into MOVIE values(4, '´õ ¹èÆ®¸Ç', '¸Ë¸®ºê½º', '·Î¹öÆ®ÆÐÆ¾½¼,Æú´Ù³ë', '¾×¼Ç', '20220301', '20220601',
+'B', 176, 10000, '¿µ¿õÀÌ µÉ °ÍÀÎ°¡ ¾Ç´çÀÌ µÉ °ÍÀÎ°¡ ¿î¸íÀ» °áÁ¤ÇÒ ¼±ÅÃ¸¸ÀÌ ³²¾Ò´Ù');
+insert into MOVIE values(5, '¸®ÄÚ¸®½¬ ÇÇÀÚ', 'Æú Åä¸¶½º ¾Ø´õ½¼', '¾Ë¶ó³ªÇÏÀÓ,ÄíÆÛÈ£ÇÁ¸¸', '¸á·Î', '20220216', '20220516',
+'B', 134, 70000, '1973³â ¾î´À Âù¶õÇÑ ¿©¸§³¯ Ã»ÃáÀÇ ÇÑº¹ÆÇÀ¸·Î ´Þ·Á°¡´Â ±×µéÀÇ ÀÌ¾ß±â');
+insert into MOVIE values(6, '³ªÀÏ °­ÀÇ Á×À½', 'ÄÉ³×½º ºê·¡³Ê', 'ÄÉ³×½ººê·¡³Ê,°¶°¡µ¾', '¹üÁË', '20220209', '20220509',
+'C', 127, 90000, '½ÅÈ¥ºÎºÎ¸¦ ÅÂ¿î ÀÌÁýÆ® ³ªÀÏ°­ÀÇ ÃÊÈ£È­ ¿©°´¼±¿¡¼­ »ìÀÎ»ç°ÇÀÌ ¹ú¾îÁø´Ù');
+insert into MOVIE values(7, '355', '»çÀÌ¸Õ Å²¹ö±×', 'Á¦½ÃÄ«Â÷½ºÅ×ÀÎ,´ÙÀÌ¾ØÅ©·ç°Å', '¾×¼Ç', '20220209', '20220509',
+'B', 122, 100000, '¿ùµåÅ¬·¡½º ºí·¢ ¿¡ÀÌÀüÆ® TEAM ¡®355¡¯ µåµð¾î ±×µéÀÌ ¿òÁ÷ÀÎ´Ù!');
+insert into MOVIE values(8, 'ÇØ¸®Æ÷ÅÍ¿Í ºÒ»çÁ¶±â»ç´Ü', 'µ¥ÀÌºø ¿¹ÀÌÃ÷', '´Ù´Ï¿¤·¡µåÅ¬¸®ÇÁ,¿¥¸¶¿Ó½¼', 'È¯Å¸Áö', '20220209', '20220509',
+'A', 137, 50000, '¾îµÒÀÇ ¼¼·Â¿¡ ºüÁø È£±×¿ÍÆ®¸¦ ±¸ÇÏ±â À§ÇØ ÇØ¸®Æ÷ÅÍ¿Í ºÒ»çÁ¶ ±â»ç´Ü, ±×µéÀÌ ¼ÕÀ» Àâ¾Ò´Ù!');
+insert into MOVIE values(9, '³ªÀÇ ÃÐºÒ', '±èÀÇ¼º', '°í¿µÅÂ,¹Ú¿µ¼ö', '´ÙÅ¥', '20220210', '20220510',
+'A', 88, 20000, '2016³â Àü¼¼°è°¡ ÁÖ¸ñÇÑ ±× ½ÃÀÛÀÇ ³¯ Áøº¸¿Í º¸¼ö¸¦ ³Ñ³ªµå´Â Á¤Ä¡ÀÎµéÀÌ ±×³¯ÀÇ ºñÈ­¸¦ Áõ¾ðÇÑ´Ù!');
+insert into MOVIE values(10, '¾Å2°Ô´õ', '°¡½ºÁ¦´×½º', '¸ÞÆ©¸ÆÄ¿³ÊÈ÷,¸®ÁîÀ§´õ½ºÇ¬', '¾Ö´Ï', '20220105', '20220405',
+'A', 109, 60000, 'Àü ¼¼°è°¡ ÁÖ¸ñÇÑ ½ºÅ×ÀÌÁö! ÇÔ²² µµÀüÇÒ ÁØºñµÆÁö?');
+
+INSERT INTO MUSER VALUES(1, 'aaa123', 'aaa123', 'aaa123@aaa.com', '19900101', '±èÈ¸¿ø', 'M', '20210101', '01011112222'); /* È¸¿ø¹øÈ£, ¾ÆÀÌµð, ºñ¹Ð¹øÈ£, ÀÌ¸ÞÀÏ, »ý³â¿ùÀÏ, ÀÌ¸§, ¼ºº°, °¡ÀÔÀÏÀÚ, ÀüÈ­ */
 INSERT INTO MUSER VALUES(2, 'bbb123', 'bbb123', 'bbb123@bbb.com', '19910202', 'ÀÌÈ¸¿ø', 'F', '20210201', '01011113333');
 INSERT INTO MUSER VALUES(3, 'ccc123', 'ccc123', 'ccc123@ccc.com', '19920303', 'Á¤È¸¿ø', 'M', '20210301', '01011114444');
 INSERT INTO MUSER VALUES(4, 'ddd123', 'ddd123', 'ddd123@ddd.com', '19930404', 'ÇöÈ¸¿ø', 'F', '20210401', '01011115555');
@@ -43,74 +100,27 @@ INSERT INTO MUSER VALUES(7, 'ggg123', 'ggg123', 'ggg123@ggg.com', '19960707', 'È
 INSERT INTO MUSER VALUES(8, 'hhh123', 'hhh123', 'hhh123@hhh.com', '19970808', 'ÀåÈ¸¿ø', 'F', '20210801', '01011119999');
 INSERT INTO MUSER VALUES(9, 'iii123', 'iii123', 'iii123@iii.com', '19980909', '±¸È¸¿ø', 'M', '20210901', '01022221111');
 INSERT INTO MUSER VALUES(10, 'jjj123', 'jjj123', 'jjj123@jjj.com', '19991010', 'ÀåÈ¸¿ø', 'F', '20211001', '01022223333');
-
-SELECT * FROM MUSER;
-
-COMMIT;
-
-CREATE TABLE THEATER(
-    t_no number(5) PRIMARY KEY,
-    t_name varchar2(10),
-    t_address varchar2(10)
-);
-
-INSERT INTO THEATER VALUES(1, '»ï°øÆÈ', 'Áß¾Óµ¿');
-INSERT INTO THEATER VALUES(2, '»ï°øÆÈ', 'ÃÊÁöµ¿');
-INSERT INTO THEATER VALUES(3, '»ï°øÆÈ', '»çµ¿');
-
-SELECT * FROM THEATER;
-
-COMMIT;
-
-CREATE TABLE THEATER_ROOM(
-    tr_no number(5) PRIMARY KEY,
-    tr_row number(10),
-    tr_column number(10)
-);
-
-INSERT INTO THEATER_ROOM VALUES(10, 5, 5);/* ½ÊÀÇ ÀÚ¸® : 1 (Áß¾Óµ¿) ÀÏÀÇ ÀÚ¸® : 1~9(»ó¿µ°ü¹øÈ£)*/
-INSERT INTO THEATER_ROOM VALUES(11, 6, 6);
-INSERT INTO THEATER_ROOM VALUES(12, 7, 7);
-INSERT INTO THEATER_ROOM VALUES(20, 5, 5);/* ½ÊÀÇ ÀÚ¸® : 2 (ÃÊÁöµ¿) ÀÏÀÇ ÀÚ¸® : 1~9(»ó¿µ°ü¹øÈ£)*/
-INSERT INTO THEATER_ROOM VALUES(21, 6, 6);
-INSERT INTO THEATER_ROOM VALUES(22, 7, 7);
-INSERT INTO THEATER_ROOM VALUES(30, 5, 5);/* ½ÊÀÇ ÀÚ¸® : 3 (ÃÊÁöµ¿) ÀÏÀÇ ÀÚ¸® : 1~9(»ó¿µ°ü¹øÈ£)*/
-INSERT INTO THEATER_ROOM VALUES(31, 6, 6);
-INSERT INTO THEATER_ROOM VALUES(33, 7, 7);
-
-SELECT * FROM THEATER_ROOM;
-
-COMMIT;
-
-CREATE TABLE RESERVATION(
-    r_no number(10) PRIMARY KEY,
-    r_count number(10),
-    r_date date,
-    u_no number(5) not null
-);
+INSERT INTO THEATER VALUES(1, '»ï°øÆÈ', 'Áß¾Óµ¿', 3); /* ¿µÈ­°ü¹øÈ£, ¿µÈ­°üÀÌ¸§, Áö¿ª(µ¿), »ó¿µ°ü¼ýÀÚ */
+INSERT INTO THEATER VALUES(2, '»ï°øÆÈ', 'ÃÊÁöµ¿', 2);
+INSERT INTO THEATER VALUES(3, '»ï°øÆÈ', '»çµ¿', 2);
+insert into theater_room values(1, 5, 5, 1); /* »ó¿µ°ü¹øÈ£, ÇàÁÂ¼®, ¿­ÁÂ¼®, ¿µÈ­°ü¹øÈ£(¿µÈ­°üÅ×ÀÌºíjoin) */
+insert into theater_room values(2, 6, 6, 1);
+insert into theater_room values(3, 7, 7, 1);
+insert into RESERVATION values(1, 1, '20220201', 1, 1, 1); /*¿¹¸Å¹øÈ£, ÀÎ¿ø¼ö, ¿¹¸Å³¯Â¥, ¿µÈ­¹øÈ£(¿µÈ­Å×ÀÌºí), È¸¿ø¹øÈ£(È¸¿øÅ×ÀÌºí), ¿µÈ­°ü¹øÈ£(¿µÈ­°üÅ×ÀÌºí) */
+insert into RESERVATION values(2, 3, '20220201', 2, 2, 2);
+insert into RESERVATION values(3, 2, '20220201', 3, 3, 3);
+insert into RESERVATION values(4, 2, '20220201', 4, 4, 2);
+insert into RESERVATION values(5, 1, '20220201', 5, 5, 1);
 
 
-/*
-
-ALTER TABLE RESERVATION ADD CONSTRAINT FK_u_id
-
-    FOREIGN KEY(u_id) REFERENCES MUSER(u_id);
-
-ALTER TABLE RESERVATION ADD CONSTRAINT FK_t_no
-
-    FOREIGN KEY(t_no) REFERENCES THEATER(t_no);
-
-ALTER TABLE RESERVATION ADD CONSTRAINT FK_m_no
-
-    FOREIGN KEY(m_no) REFERENCES MOVIE(m_no);
-
-*/  
-CREATE TABLE qna(
-    q_no number(10) PRIMARY KEY,
-    q_title varchar2(20),
-    q_con varchar2(3000),
-    q_hit number(10),
-    q_date date
-);
-
-commit;
+select theater.t_name, theater.t_address, theater.t_list, theater_room.tr_no, theater_room.tr_row, theater_room.tr_column from theater, theater_room WHERE THEATER.t_no = THEATER_ROOM.t_no;
+/*1. À¯Àú¹øÈ£°¡ 1¹øÀÎ »ç¶÷ÀÇ ÀÌ¸§°ú ¹øÈ£, ¿¹¾àÀÎ¿ø¼ö  ¿¹¾à³¯Â¥ ¿µÈ­ÀÌ¸§À» Ãâ·ÂÇÏ¼¼¿ä*/
+select muser.u_name, muser.u_phone, RESERVATION.r_count, reservation.r_date, MOVIE.m_name from muser, RESERVATION, MOVIE WHERE muser.u_no = 1 AND muser.u_no = RESERVATION.u_no;
+/*2. »çµ¿ ¿µÈ­°üÀÇ ¿¹¾à ÀÎ¿ø¼ö¸¦ Ãâ·ÂÇÏ¼¼¿ä*/
+select THEATER.t_name, RESERVATION.r_count from THEATER, RESERVATION WHERE RESERVATION.t_no = 3 And RESERVATION.t_no = THEATER.t_no;
+/*3. 19¼¼ ÀÌ»ó ¿µÈ­¸¸ Ãâ·ÂÇÏ¼¼¿ä*/
+select * from MOVIE WHERE m_grade = 'C';
+/*4. ¿µÈ­ °³ºÀ¼ø Á¤·Ä*/
+SELECT * from MOVIE order by m_rtime desc;
+/*5. È¸¿ø °¡ÀÔ¼ø ¿À¸§Â÷¼øÀ¸·Î Á¤·Ä*/
+SELECT * from MUSER order by u_regdate DESC;
