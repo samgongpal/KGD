@@ -45,11 +45,6 @@ function checkAll() {
 	}
 	if(obj.idDuplication.value != idUncheck) {
 	    alert("아이디를 중복체크 해주세요");
-	    obj2.u_phone3.focus();
 		return false;
 	}
-}
-
-function idCheck() {
-    window.open("idCheckForm.jsp", "idwin", "width=400 height=350");
 }
